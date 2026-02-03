@@ -4,11 +4,11 @@ This project implements an end-to-end Retrieval-Augmented Generation (RAG) pipel
 
 ## Folder Structure
 
-
-RAG_Sanskrit_Alankar/
+```
+immverse_ai_rag_project/
 ├── code/
 │   ├── build_index.py
-|   
+│   
 │   ├── query.py
 │   ├── requirements.txt
 │   └── faiss_index/ # Created after running build_index.py
@@ -23,7 +23,7 @@ RAG_Sanskrit_Alankar/
 │   ├── report.pdf
 │   └── report.md
 └── README.md
-
+```
 
 ## Features
 
