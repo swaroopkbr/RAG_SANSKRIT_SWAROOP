@@ -8,7 +8,9 @@ This project implements an end-to-end Retrieval-Augmented Generation (RAG) pipel
 immverse_ai_rag_project/
 ├── code/
 │   ├── build_index.py
-│   
+│   ├── ingest.py
+│   ├── pipeline.py
+│   ├── preprocess.py
 │   ├── query.py
 │   ├── requirements.txt
 │   └── faiss_index/ # Created after running build_index.py
@@ -87,11 +89,14 @@ python code/query.py
 
 Expected Output:
 
-'''
+```
+
 ======================================================================     
 ✅ Sanskrit Document Retrieval-Augmented Generation System
 ✅ CPU-only Inference Enabled
 ======================================================================     
 
 Enter Sanskrit Query (or type 'exit'):
-'''
+```
+
+
