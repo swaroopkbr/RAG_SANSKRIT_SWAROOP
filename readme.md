@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Sanskrit Document Retrieval-Augmented Generation (RAG) System
 
 This project implements an end-to-end Retrieval-Augmented Generation (RAG) pipeline for Sanskrit documents. It ingests Sanskrit .txt files, builds a FAISS vector index, retrieves relevant context, and generates answers using a CPU-based LLM.
@@ -200,6 +199,3 @@ Expected Output:
 Enter Sanskrit Query (or type 'exit'):
 ```
 
-
-
->>>>>>> 4ca330f04ff2cfc6bfe6fdffb397c9105886efa0
