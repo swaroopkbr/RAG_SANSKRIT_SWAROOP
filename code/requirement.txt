@@ -4,5 +4,6 @@ transformers
 torch
 pypdf
 langchain
-langchain-text-splitters
-streamlit
+tqdm
+numpy
+accelerate
