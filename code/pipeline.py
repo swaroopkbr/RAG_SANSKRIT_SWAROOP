@@ -10,8 +10,8 @@ from transformers import pipeline
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # paths to save index and chunks file
-INDEX_PATH = os.path.join(PROJECT_ROOT, "faiss_index.idx")
-CHUNKS_PATH = os.path.join(PROJECT_ROOT, "chunks.pkl")
+INDEX_PATH = os.path.join(PROJECT_ROOT, "code", "faiss_index", "index.faiss")
+CHUNKS_PATH = os.path.join(PROJECT_ROOT, "code", "faiss_index", "chunks.pkl")
 
 # retriever embedding model
 embedder = SentenceTransformer(
