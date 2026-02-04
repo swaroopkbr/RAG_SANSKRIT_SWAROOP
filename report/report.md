@@ -1,5 +1,5 @@
 # ✅ Technical Report  
-## Sanskrit Document Retrieval-Augmented Generation (RAG) System (CPU Only)
+## End-to-End Sanskrit Question Answering System using Retrieval-Augmented Generation
 
 ---
 
@@ -274,16 +274,14 @@ Context-grounded answer generation
 
 CPU-only deployment feasibility
 
-# 8. Future Enhancements
+#  8. Future Enhancements
 
-Potential upgrades include:
+Some possible improvements for extending this system in the future are:
 
-Transliteration input support (IAST/English → Sanskrit conversion)
-
-PDF document ingestion support
-
-Sanskrit-specific embedding models for higher precision
-
-Streamlit/Flask UI deployment
-
-Quantitative evaluation metrics such as retrieval precision scores
+Adding transliteration support so users can ask questions in English/IAST input
+   
+Expanding document support beyond `.txt` by enabling PDF ingestion
+  
+Exploring Sanskrit-focused embedding models to further improve retrieval accuracy
+  
+Developing a simple web-based interface using Streamlit or Flask for better usability 
