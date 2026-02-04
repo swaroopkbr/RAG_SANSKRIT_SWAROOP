@@ -278,10 +278,11 @@ CPU-only deployment feasibility
 
 Some possible improvements for extending this system in the future are:
 
-Adding transliteration support so users can ask questions in English/IAST input
-   
-Expanding document support beyond `.txt` by enabling PDF ingestion
-  
-Exploring Sanskrit-focused embedding models to further improve retrieval accuracy
-  
-Developing a simple web-based interface using Streamlit or Flask for better usability 
+•	Adding transliteration support so users can ask questions in English/IAST input
+
+•	Expanding document support beyond .txt by enabling PDF ingestion
+
+•	Exploring Sanskrit-focused embedding models to further improve retrieval accuracy
+
+•	Developing a simple web-based interface using Streamlit or Flask for better usability
+
