@@ -1,185 +1,285 @@
-# Technical Report
-## Sanskrit Document Retrieval-Augmented Generation (RAG) System (CPU Only)
+✅ Technical Report
+Sanskrit Document Retrieval-Augmented Generation (RAG) System (CPU Based)
+Project Title:
 
-### Project Title:
 Sanskrit Document Retrieval-Augmented Generation (RAG) System
 
-### Submitted By:
+Submitted By:
+
 Swaroop Kumbhalwar
 
-### Folder Name:
-`immverse_ai_rag_project`
+Project Folder Name:
 
----
+immverse_ai_rag_project
 
-## 1. Objective
-The objective of this assignment is to design and implement a Retrieval-Augmented Generation (RAG) system capable of processing and answering queries based on Sanskrit documents. The system must operate fully on CPU-based inference without GPU usage.
+1. Objective
 
----
+The main aim of this project is to build a Retrieval-Augmented Generation (RAG) system that can answer questions using a collection of Sanskrit documents.
+A key requirement of the assignment is that the complete pipeline should run only on CPU-based inference, without using any GPU resources.
 
-## 2. System Description
-This project implements an end-to-end RAG pipeline that performs the following operations:
+This ensures the solution remains lightweight, efficient, and deployable on basic hardware.
 
-1. Ingest Sanskrit documents (in `.txt` format)
-2. Preprocess and chunk the documents
-3. Index the chunks for efficient retrieval
-4. Accept user queries in Sanskrit or transliterated text
-5. Retrieve relevant context chunks from the indexed corpus
-6. Generate coherent responses using a CPU-based Large Language Model (LLM)
+2. Project Overview
 
-The solution follows modular RAG principles with clear separation between the retriever and generator components.
+This project is an end-to-end implementation of a Sanskrit-aware RAG pipeline.
+The system is designed to:
 
----
+Load Sanskrit documents stored in plain text format
 
-## 3. System Architecture & Flow
+Clean and split the content into smaller meaningful chunks
 
-### 3.1 High-Level RAG Flow
-1. **Document Loader**
-2. **Preprocessing + Chunking**
-3. **Embedding Generation**
-4. **Vector Index Creation (FAISS)**
-5. **User Query Input (CLI)**
-6. **Retriever → Top-k Context Chunks**
-7. **Prompt Construction**
-8. **LLM Generation**
-9. **Final Answer + Sources Output**
+Create embeddings and index the chunks for fast retrieval
 
-### 3.2 Architecture Modules
+Accept Sanskrit user queries at runtime
 
-#### A) Ingestion Module (`build_index.py`) – Offline Pipeline
-- Loads Sanskrit `.txt` documents from `/data`
-- Splits text into chunks
-- Generates embeddings for chunks
-- Creates FAISS vector index and saves it to `/code/faiss_index`
+Retrieve the most relevant document chunks from the corpus
 
-#### B) Query Module (`query.py`) – Online Pipeline
-- Loads FAISS index from disk
-- Retrieves most relevant chunks using vector similarity search + MMR
-- Sends retrieved context and query to the generator LLM
-- Prints answer with source evidence
+Generate accurate answers using a lightweight CPU-supported LLM
 
----
+The overall structure follows standard modular RAG principles, where retrieval and generation are clearly separated.
 
-## 4. Sanskrit Documents Used
-The Sanskrit dataset consists of short stories/subhashitas stored in `.txt` format inside `/data/`.
-Documents were separated story-wise for better retrieval quality.
+3. System Architecture and Workflow
+3.1 Overall RAG Execution Flow
 
-Files used:
-- `murkhabhritya.txt` – **मूर्खभृत्यस्य** (Shankhnad story)
-- `devbhakta.txt` – **देवभक्तः कथा** (devotion + effort)
-- `ghantakarna.txt` – **वृद्धायाः चार्तुयम् / घण्टाकर्णः कथा**
-- `kalidasa.txt` – **चतुरस्य कालीदासस्य** (clever Kalidasa story)
-- `sheetam.txt` – **शीतं बहु बाधति** (cold hurts very much)
+The pipeline follows the below stages:
 
-Story-wise separation reduces context mixing and improves answer relevance.
+Document Loading
 
----
+Text Cleaning and Chunking
 
-## 5. Preprocessing Pipeline
+Semantic Embedding Creation
 
-### 5.1 Document Loading
-Documents are loaded using:
-- `DirectoryLoader`
-- `TextLoader(encoding="utf-8")`
+Vector Index Construction using FAISS
 
-### 5.2 Chunking
-Chunks are created using `RecursiveCharacterTextSplitter`.
+User Query Input via CLI
 
-Configuration:
-- **chunk_size = 350**
-- **chunk_overlap = 50**
+Retrieval of Top-k Relevant Chunks
 
-Chunking improves retrieval accuracy and avoids exceeding model context/token limits.
+Prompt Formation with Retrieved Context
 
-### 5.3 Embedding Generation
-Chunk embeddings are generated using:
-- `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
+Answer Generation using LLM
 
-Reason for selection:
-- CPU-friendly
-- multilingual semantic retrieval support
-- effective for Sanskrit/Hindi-like scripts
+Final Output with Supporting Sources
 
----
+3.2 Module-Based Architecture
 
-## 6. Retriever Component
+The system is divided into two primary modules:
 
-### 6.1 Vector Store
-Vector database used:
-- **FAISS (CPU)**
+A. Indexing Pipeline (Offline Stage)
 
-FAISS supports fast similarity search and efficient local storage.
+File: build_index.py
 
-### 6.2 Retrieval Strategy
-Retriever uses:
-- **MMR (Max Marginal Relevance)**
+This module prepares the retrieval system in advance:
 
-Benefits:
-- retrieves diverse but relevant chunks
-- reduces redundancy
-- improves contextual grounding
+Sanskrit text files are loaded from the /data folder
 
----
+Documents are split into context chunks
 
-## 7. Generator Component
+Embeddings are generated for each chunk
 
-### 7.1 LLM Model (CPU Only)
-Generator model:
-- `google/flan-t5-small`
+A FAISS vector index is created and stored inside /code/faiss_index
 
-Reason:
-- lightweight model suitable for CPU inference
-- faster than larger LLMs
-- works well for QA-style generation
+This indexing step is executed once before querying.
 
-### 7.2 Prompting Strategy
-A constrained prompt template is used to ensure:
-- answers are generated only from retrieved context
-- if answer is not present, system outputs:
-  **`सन्दर्भे उत्तरं न लभ्यते।`**
+B. Query Pipeline (Online Stage)
 
-The system also prints sources to improve transparency.
+File: query.py
 
----
+This module handles real-time question answering:
 
-## 8. Performance Observations
+Loads the stored FAISS index from disk
 
-### 8.1 Latency
-- **FAISS retrieval latency:** fast (usually under 1 second)
-- **LLM generation latency (CPU):** depends on CPU speed, typically a few seconds per query
+Performs similarity-based retrieval using MMR
 
-### 8.2 Resource Usage
-- Runs completely on CPU
-- Resource usage mainly depends on:
-  - embedding model memory
-  - FAISS index size
-  - FLAN-T5 model memory
+Passes relevant context + query into the LLM
 
-Using `flan-t5-small` ensures reduced RAM usage and faster inference.
+Displays the generated answer along with supporting evidence
 
-### 8.3 Relevance / Accuracy
-Accuracy mainly depends on the retriever quality.
+4. Sanskrit Document Dataset
 
-Improvements observed:
-- separating documents story-wise reduces wrong retrieval
-- MMR improves diverse context selection
+The document corpus contains Sanskrit stories and subhashitas stored as individual .txt files under /data/.
+
+Each document is separated story-wise to ensure better retrieval grounding and prevent topic mixing.
+
+Files Included:
+
+murkhabhritya.txt – मूर्खभृत्यस्य (Shankhnad story)
+
+devbhakta.txt – देवभक्तः कथा (faith and effort)
+
+ghantakarna.txt – वृद्धायाः चातुर्यम् / घण्टाकर्णः कथा
+
+kalidasa.txt – चतुरस्य कालीदासस्य कथा
+
+sheetam.txt – शीतं बहु बाधति कथा
+
+Maintaining separate files significantly improves answer relevance during retrieval.
+
+5. Text Preprocessing Pipeline
+5.1 Document Loading
+
+Documents are loaded through:
+
+DirectoryLoader
+
+TextLoader(encoding="utf-8")
+
+UTF-8 encoding ensures proper handling of Devanagari text.
+
+5.2 Chunk Creation
+
+Since long documents cannot be passed directly into an LLM, the text is split using:
+
+RecursiveCharacterTextSplitter
+
+Chunk configuration:
+
+chunk_size = 350
+
+chunk_overlap = 50
+
+This helps in:
+
+Improving retrieval precision
+
+Avoiding context overflow
+
+Retaining continuity between chunks
+
+5.3 Embedding Generation
+
+To represent Sanskrit chunks semantically, embeddings are created using:
+
+sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+
+Chosen because it is:
+
+Efficient for CPU usage
+
+Supports multilingual semantic similarity
+
+Works effectively for Sanskrit-like scripts
+
+6. Retrieval System
+6.1 Vector Storage
+
+The retrieval layer is powered by:
+
+✅ FAISS (CPU Vector Store)
+
+FAISS enables fast similarity search and local indexing without GPU dependency.
+
+6.2 Retrieval Technique
+
+The retriever uses:
+
+✅ MMR (Max Marginal Relevance)
+
+This strategy improves retrieval by:
+
+Selecting relevant but diverse chunks
+
+Reducing repetitive context
+
+Enhancing grounding for generation
+
+7. Answer Generation Component
+7.1 CPU-Compatible LLM
+
+The generation model used is:
+
+google/flan-t5-small
+
+This model was selected because:
+
+It is lightweight and fast on CPU
+
+Works well for QA tasks
+
+Requires significantly less memory
+
+7.2 Prompt Engineering
+
+A strict prompt format is used to ensure:
+
+Answers are only based on retrieved context
+
+Hallucinations are minimized
+
+If the context does not contain an answer, the system responds with:
+
+"सन्दर्भे उत्तरं न लभ्यते।"
+
+Additionally, retrieved sources are printed for transparency.
+
+8. Performance Observations
+8.1 Latency
+
+Retrieval using FAISS is extremely fast (generally < 1 second)
+
+LLM generation speed depends on CPU power, usually taking a few seconds
+
+8.2 Resource Efficiency
+
+The complete system runs without GPU support.
+Main resource consumption comes from:
+
+Embedding model memory
+
+FAISS index size
+
+FLAN-T5 inference load
+
+Using flan-t5-small keeps RAM usage low and inference efficient.
+
+8.3 Answer Quality and Relevance
+
+System accuracy depends heavily on retrieval quality.
+
+Key improvements noticed:
+
+Story-wise separation reduces incorrect context overlap
+
+MMR selects better diverse chunks
 
 Example:
-- Query: `शंखनादः कः?`
-- Correct retrieval from `murkhabhritya.txt`
-- Generated response:  
-  **शंखनादः गोवर्धनदासस्य भृत्यः (आज्ञापालकः) अस्ति।**
 
----
+Query: शंखनादः कः?
 
-## 9. Conclusion
-The Sanskrit Document RAG System was successfully implemented as an end-to-end CPU-based pipeline. The system ingests Sanskrit documents, preprocesses and indexes them using embeddings + FAISS, retrieves relevant context, and generates answers using a CPU-based LLM. This implementation follows standard modular RAG architecture and satisfies the requirements of the assignment.
+Correctly retrieved from murkhabhritya.txt
 
----
+Generated Answer:
 
-## 10. Future Improvements
-- Add transliteration support (IAST / English input → Devanagari conversion)
-- Add support for PDF ingestion (`PyPDFLoader`)
-- Use Sanskrit-specific embedding model (if available) for higher retrieval accuracy
-- Build a simple UI (Streamlit / Flask) for demonstration
-- Add evaluation metrics (Top-k retrieval accuracy / BLEU-like score / response relevance scoring)
+शंखनादः गोवर्धनदासस्य भृत्यः (आज्ञापालकः) अस्ति।
+
+9. Conclusion
+
+The Sanskrit Document Retrieval-Augmented Generation (RAG) System was successfully developed as a complete CPU-only question answering pipeline.
+
+The system:
+
+Ingests Sanskrit texts
+
+Chunks and embeds content
+
+Indexes using FAISS
+
+Retrieves relevant context
+
+Generates grounded answers using FLAN-T5
+
+This implementation satisfies all assignment requirements while following a clean modular RAG architecture.
+
+10. Future Enhancements
+
+Possible improvements include:
+
+Sanskrit transliteration support (English → Devanagari conversion)
+
+PDF ingestion support using PyPDFLoader
+
+Sanskrit-specialized embedding models for better accuracy
+
+Building a UI demo using Streamlit or Flask
+
+Adding evaluation metrics like retrieval precision and relevance scoring
