@@ -1,4 +1,4 @@
-# End-to-End Sanskrit Question Answering System using Retrieval-Augmented Generation
+# VedaRAG - End-to-End Sanskrit Question Answering System using Retrieval-Augmented Generation
 
 This project implements a CPU-only end-to-end Sanskrit RAG pipeline that ingests documents, retrieves relevant context using FAISS, and generates grounded answers with an LLM.
 
